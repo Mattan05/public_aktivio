@@ -1,0 +1,179 @@
+/* .upload{
+    width:100px;
+    position:relative;
+    margin:auto;
+}
+
+.upload img{
+    border-radius:50%;
+}
+
+.upload .round{
+    position:absolute;
+    bottom: 0;
+    right: 0;
+    background: #00B4FF;
+    width:32px;
+    height:32px;
+    border-radius:50%;
+    overflow:hidden;
+}
+
+.upload .round input[type='file']{
+    position:absolute;
+    transform:scale(2);
+    opacity:0;
+} */
+
+/* General Styling */
+/* body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif !important;
+    background-color: #f4f4f4;
+    color: #333;
+} */
+
+.account-wrapper {
+    padding: 1rem;
+    max-width: 600px;
+    margin: 0 auto;
+    /* background-color: #fff; */
+    border-radius: 8px;
+    color:#fff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    text-align:center;
+}
+
+/* User Info Section */
+.user-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.account-wrapper summary {
+    font-size:2rem;
+}
+
+.user-details p {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+}
+
+.account-image img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-top: 1rem;
+}
+
+/* Form Styling */
+.account-wrapper form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 1rem;
+}
+
+.account-wrapper form label {
+    font-size: 0.9rem;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.update-profile{
+    display:flex;
+}
+
+.change-password{
+    display:flex;
+}
+
+.account-settings{
+    display:flex;
+}
+
+.account-wrapper form input[type="text"],
+.account-wrapper form input[type="email"],
+.account-wrapper form input[type="password"],
+.account-wrapper form input[type="file"] {
+    padding: 0.8rem;
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    width: 100%;
+}
+
+.account-wrapper form button {
+    background-color: orange;
+    border: none;
+    padding: 5%;
+    border-radius: 5px;
+}
+
+.logout {
+    display: flex;
+    border:1px solid black;
+    padding:3%;
+}
+
+/* //pfp */
+
+.profile-pic {
+    position: relative;
+    width: 165px;
+    height: 165px;
+}
+ /* //ändrar i eventpage */
+    .profile-pic img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: 50%;
+        box-shadow: 0 0 10px 0 rgba(255, 255, 255, 0.35);
+    }
+
+    .profile-pic input {
+        display: none;
+    }
+
+    .file-label {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(0, 0, 0, 0.6);
+        color: white;
+        font-size: 1.2rem;
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        cursor: pointer;
+    }
+
+    &:hover .file-label {
+        opacity: 0.7;
+        display:flex;
+        gap:5px;
+    }
+
+   /*  span {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    } */
+
+    section.section-img{
+        display:flex;
+        justify-content:center;
+    }
+

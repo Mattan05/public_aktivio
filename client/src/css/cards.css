@@ -1,0 +1,171 @@
+.ad-card{
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  padding:2%;
+  color:black;
+  text-align:center;
+  margin-bottom: 5%;
+}
+
+.event-card {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  /* overflow:scroll; */
+  max-width: 100%;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+  border-radius: 15px; 
+  /* padding: 2%; */
+  text-align: center;
+  margin-bottom: 5%;
+  color:black;
+  overflow-x:hidden;
+  min-height:20vh;
+  }
+  
+.event_img{
+  width:100%;
+  max-height:25vh;
+  /* padding:3%; */
+  aspect-ratio:1 / 1;  
+}
+
+.event_img img{
+    height:100%;
+    width:100%;
+    object-fit:cover;
+    border-left-radius: 15px; 
+}
+
+/* .wrapper-cards {
+    display: flex;
+    padding: 2%;
+
+} */
+
+/* .card-info{
+  display:grid;
+  grid-template-rows:1fr 1fr;
+  min-height:20vh;
+} */
+
+
+/* .card-info{
+  padding:3%;
+  text:center;
+}
+ */
+/* .card-info h4{
+  font-size:2.5rem;
+}
+
+.card-info p{
+  font-size:1.5rem;
+} */
+
+#description-input{
+  height:20vh;
+}
+
+
+
+
+
+/* CREATE EVENT */
+.wrapper-create {
+  max-width: 500px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header Style */
+.wrapper-create h2 {
+  text-align: center;
+  color: #333;
+  margin-bottom: 20px;
+}
+
+/* Form Styles */
+.event-form {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Input Fields */
+.event-form input[type="text"],
+.event-form input[type="datetime-local"],
+.event-form select {
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+textarea{
+  width: 100%;
+  padding: 12px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 16px;
+}
+
+/* Placeholder Styles */
+.event-form input::placeholder {
+  color: #aaa;
+}
+
+.event-form input[type="submit"] {
+  background-color: #28a745;
+  color: white;
+  border: none;
+  padding: 12px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+
+.event-form input[type="submit"]:hover {
+  background-color: #218838;
+}
+
+/* .server-message {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 16px;
+} */
+
+.del-cardButton{
+/*   display:flex; */
+  background-color: transparent;
+  color: black; 
+  border: none; 
+  cursor: pointer; 
+/*   padding:5%; */
+  justify-content:left;
+}
+
+.cardButtons span{
+  font-size:2rem;
+}
+
+.fav-cardButton{
+  /* padding:3%; */
+/*   border-radius:15px; */
+  background-color: transparent;
+ /*  color: black;  */
+  border: none; 
+  cursor: pointer; 
+  display:flex;
+  
+}
+
+.cardButtons{
+  display:flex;
+  justify-content:center;
+  /* justify-content:right; */
+}

@@ -1,0 +1,94 @@
+@import "./css/header.css";
+@import "./css/navbar.css";
+@import "./css/cards.css";
+@import "./css/account.css";
+
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+    max-width: 100%;
+  /*   overflow-x: hidden; */
+  }
+
+ /*  *:hover {
+    pointer-events: auto !important;
+    background: inherit !important; 
+    color: inherit !important;     
+    box-shadow: none !important;  
+    text-decoration: none !important; 
+} */
+
+html{
+    scroll-behavior: smooth;
+}
+
+a:hover{
+    color:inherit !important;
+    text-decoration:inherit !important;
+}
+
+body{
+    font-family: "Poppins", sans-serif !important;
+}
+
+/* main{
+    padding-bottom:10vh;
+}
+ */
+.views{
+    display:none;
+    padding-bottom: 10vw;
+}
+
+.views:target{
+    display:block;
+}
+
+.server-message{
+    text-align:center;
+}
+
+a:link{
+    text-decoration:none;
+}
+
+/* footer{ ska jag ha med footer eller inte?
+    position: absolute;
+    bottom: 100;
+    margin-top:25vh;
+    width:100%;
+    color:rgb(0, 0, 0);
+    text-align:center;
+} */
+
+html{
+    scroll-behavior:smooth;
+}
+
+input{
+    width:100%;
+    font-size:1.3rem;
+    padding:2%;
+
+}
+
+.filter-nav{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:30px;
+}
+
+
+/* form{
+    width:50%;
+    display:block;
+    margin:auto;
+   
+} */
+
+input[type="submit"]{
+    background-color:green;
+    color:white;
+    cursor:pointer;
+}

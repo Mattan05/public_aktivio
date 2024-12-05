@@ -48,14 +48,25 @@ function Login({checkSessionStatus}) {
 
     return ( 
     <>
-        <h2>Logga in</h2>
-        <form onSubmit={handleSubmit}>
-            <input type="email" name="email" placeholder="Email" autoComplete="off"/> {/* required */}
-            <input type="password" name="password" placeholder="Lösenord" autoComplete="off"/>
-            <input type="submit" value="Logga in" />
+        <h2 className='text-center text-warning p-2'>Logga in</h2>
+        
+        <form onSubmit={handleSubmit} className="p-3 border rounded shadow-sm">
+        <div className="mb-3">
+            <input
+            type="email" name="email" placeholder="Email" autoComplete="off" className="form-control" required
+            />
+        </div>
+        
+        <div className="mb-3">
+            <input type="password" name="password" placeholder="Lösenord" autoComplete="off" className="form-control" required
+            />
+        </div>
+
+        <button type="submit" className="btn btn-warning w-100">Logga in</button> {/* Added Bootstrap button styling */}
         </form>
-        <div className="server-message" >
-            <p style={{color: messageCol ? "green" : "red" }}>{responseMessage} </p>
+
+        <div className="server-message mt-3">
+        <p style={{ color: messageCol ? "green" : "red" }}>{responseMessage}</p>
         </div>
     </>
     );

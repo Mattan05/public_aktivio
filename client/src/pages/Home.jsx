@@ -7,28 +7,27 @@ function Home({event, setEventArr, setUserEvents, setEventPage, isAuth, userId, 
     const [colorFavorite, setColorFavorite] = useState(false);
 
   /*   console.log("colorFavorite " + colorFavorite); */
-
+  
     useEffect(() => {
-        // Hämta favoritstatus från databasen när komponenten laddas
-        async function fetchFavoriteStatus() {
-            try {
-                let res = await fetch(`http://localhost/aktivio/isFavorite?userId=${userId}&eventId=${event.id}`);
-                let data = await res.json();
-                  
-                if (data['success']) {
-                    setColorFavorite(true);
-                }
-            } catch (error) {
-                console.error("Kunde inte hämta favoritstatus:", error);
-            }
-        }
-        
         fetchFavoriteStatus();
     }, [userId, event.id]);
     
     useEffect(() => {
         window.location.replace('#home');
       }, []);
+
+      async function fetchFavoriteStatus() {
+        try {
+            let res = await fetch(`http://localhost/aktivio/isFavorite?userId=${userId}&eventId=${event.id}`);
+            let data = await res.json();
+              
+            if (data['success']) {
+                setColorFavorite(true);
+            }
+        } catch (error) {
+            console.error("Kunde inte hämta favoritstatus:", error);
+        }
+    }
 
         async function delFunc(ev){
            ev.stopPropagation();
@@ -44,7 +43,7 @@ function Home({event, setEventArr, setUserEvents, setEventPage, isAuth, userId, 
             setEventArr(prev=>prev.filter(item=>item.id != event.id));
             setUserEvents(prev=>prev.filter(item=>item.id != event.id));  //funkar ej om jag lägger till !==
         }
-/* 
+/*
         async function loadEventPage(){
             let res = await fetch("http://localhost/aktivio/event/"+event.id);
             let eventData = await res.json();
@@ -61,6 +60,11 @@ function Home({event, setEventArr, setUserEvents, setEventPage, isAuth, userId, 
             //lägg sedan till en counter för likes som det ska finnas ett attribut för i event tabellen. 
             ev.stopPropagation();
             ev.preventDefault();
+            console.log(ev);
+            /* if(colorFavorite){
+              console.log("Redan gillad");
+              return;
+            } */
 
             let body = JSON.stringify({
                 userId:userId,
@@ -97,18 +101,30 @@ function Home({event, setEventArr, setUserEvents, setEventPage, isAuth, userId, 
                     else setFavorites(prev=>prev.filter(ch=>ch.id!=e.id));
                     return !prev;
                   }); */
-          console.log("EVENT");
-          console.log(event)
+  /*         console.log("EVENT");
+          console.log(event) */
                 setFavorites(prev => [event, ...prev]);
                 setColorFavorite(true);
+                
+                setEventArr((prevEvents) =>
+                  prevEvents.map((item) =>
+                    item.id === event.id
+                      ? { ...item, like_count: Number(item.like_count) + 1 }  
+                      : item
+                  )
+                );
+                
+     
+
             }
-          /*   console.log(colorFavorite); */
+          /* console.log(colorFavorite); */
            
         }
 
         async function removeFavorite(ev){ //LÄGG REMOVEFAVORITE OCH ADDFAVORITE I APP FÖR ATT SEDAN KUNNA ANVÄNDA I FAVORITES.JSX OCKSÅ
             ev.stopPropagation();
             ev.preventDefault();
+            console.log("remove");
 
             let body = JSON.stringify({
                 userId:userId,
@@ -121,27 +137,32 @@ function Home({event, setEventArr, setUserEvents, setEventPage, isAuth, userId, 
                     'Content-Type': 'application/json'
                 },
                 body
-                
             });
 
             let deleteRes = await serverRes.json();
-            console.log("gegfdg"+deleteRes);
+           /*  console.log("gegfdg"+deleteRes); */
             if(deleteRes.error){
                 console.log("Error:" + deleteRes.error);
                 return;
             }
             setFavorites(prev => prev.filter(fav => fav.id !== event.id));
             setColorFavorite(false);
-        }
+
+            setEventArr((prevEvents) =>
+              prevEvents.map((item) =>
+                item.id === event.id
+                  ? { ...item, like_count: Number(item.like_count) - 1 }  
+                  : item
+              )
+            );
+        }  
         
-      
-    
         return (
             <>
               {event.type !== "ad" ? (
                 <a href="#eventPage">
                   <div onClick={() => loadEventPage(event)} className="wrapper-cards p-2">
-                    <div className="event-card bg-secondary">
+                    <div className="event-card" id={event.id}>
                       <div className="event_img">
                         <img
                           className=' '/* rounded-lg */
@@ -151,7 +172,7 @@ function Home({event, setEventArr, setUserEvents, setEventPage, isAuth, userId, 
                         />
                       </div>
                       <div className="card-info align-items-center text-center p-2">
-                        <div className="text-dark">
+                        <div className="text-warning">
                           <h4 className="">{event.title}</h4>
                           <p>{event.event_date}</p>
                         </div>
@@ -169,7 +190,7 @@ function Home({event, setEventArr, setUserEvents, setEventPage, isAuth, userId, 
                             style={{ color: colorFavorite ? 'red' : 'black' }}
                           >
                             <span className="material-symbols-outlined">favorite</span>
-                            <p>{event.like_count}</p>
+                            <strong>{event.like_count}</strong>
                           </button>
                         )}
                       </div>
@@ -184,7 +205,7 @@ function Home({event, setEventArr, setUserEvents, setEventPage, isAuth, userId, 
                     <div className="card-info">
                       <h2>{event.title}</h2>
                       <p>{event.description}</p>
-                      <button className="btn">Klicka för att gå vidare!</button>
+                      <button className="btn btn-danger">Klicka för att gå vidare!</button>
                     </div>
                   </div>
                 </div>

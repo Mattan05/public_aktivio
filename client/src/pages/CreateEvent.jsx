@@ -3,7 +3,7 @@ import { useState, useEffect, useRef } from 'react';
 
 import Select from 'react-select'
 
-function CreateEvent({setEventArr, userId, allCities}) {
+function CreateEvent({setEventArr, setUserEvents, userId, allCities}) {
 
    /*  console.log("postmadeby"+ userId); */
     useEffect(()=>{
@@ -109,10 +109,16 @@ function CreateEvent({setEventArr, userId, allCities}) {
                 console.log(result.success);
                 
                 body.event_img = result.event_img;
-                setEventArr(prev=>[...prev,body]);
-                setUserEvents(prev=>[...prev,body]); 
+               /*  setEventArr(prev=>[...prev,body]);
+                setUserEvents(prev=>[...prev,body]);  */
                 
-                
+                setEventArr(prev => {
+                    const updatedEvents = [...prev, body];
+    
+                    setUserEvents(prevUserEvents => [...prevUserEvents, body]);
+    
+                    return updatedEvents;
+                });
             }else{
                 console.log("Failed to upload file" + result.error);
             }           
@@ -149,7 +155,7 @@ function CreateEvent({setEventArr, userId, allCities}) {
     return ( 
     <>
     <div className="wrapper-create">
-        <h2>Skapa Event</h2>
+        <h2 className='text-warning'>Skapa Event</h2>
         <form className="event-form" ref={formRef} onSubmit={handleSubmit}>
             <input type="text" name="title" placeholder="Titel" />
             <textarea id="description-input" name="description" cols="40" rows="5" placeholder="Beskrivning"></textarea>
@@ -163,7 +169,7 @@ function CreateEvent({setEventArr, userId, allCities}) {
                 ))}
             </select> */}
             <Select options={allCities} name="location" placeholder="Välj Plats"/>
-        <select name="category_id" defaultValue={'DEFAULT'}>
+        <select name="category_id" defaultValue={'DEFAULT'} className='text-light'>
             <option value="DEFAULT" disabled>Välj Kategori</option>
             {allCategories.map(c => (
                 <option key={c.category_id} name="category_id" value={c.category_id}> {/* value med databas id syns i html klartext - ok / dåligt= */} {/* //SKA ID VARA NAMNET KSK. */}
@@ -172,7 +178,7 @@ function CreateEvent({setEventArr, userId, allCities}) {
             ))}
         </select>
             <input type="file" name="event_img"/>
-            <input type="submit" value="Skapa Evenemang" />
+            <input className="bg-danger" type="submit" value="Skapa Evenemang" />
         </form>
         <div className="server-message" >
             <p style={{color: messageCol ? "green" : "red" }}>{responseMessage}</p>

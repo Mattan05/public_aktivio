@@ -41,10 +41,14 @@ App::get('/auth', function(){
  });
 
 App::post("/register", function(){
-    $data =(array) json_decode(file_get_contents('php://input'));
-
+    $data =(array) json_decode(file_get_contents('php://input'));   
+   
     header("Content-Type:application/json");
     
+    if (containsBadWords($data["username"])) {
+        jsonResponse(["error" => "Användarnamnet innehåller olämpliga ord"]);
+        return;
+    }
 
     if(strlen($data["password"])<6){
         echo json_encode(["error" => "Password must be at least 6 characters long"]); //funkar inte
@@ -102,6 +106,25 @@ App::post("/login", function(){
     }
 });
 
+function containsBadWords($text) {
+    $textLower = mb_strtolower($text, 'UTF-8'); 
+    $badWords = ["neger", "nigger", "hora", "mongo", "cp", "nigga", "runka", "runkning", "fitta", "kuk", "slampa", "knulla", "röv", "n3ger", "retard", "chigga", "horunge", "bög", "transa", "porr",
+                "anal", "porn", "bögporr", "niggas", "fuck", "fucking", "slakt", "döda", "sharmuta", "vagina", "snopp","snippa", "vagina", "vaginalt", "bajs", "kiss", 
+                "mörda", "kill", "våldta", "rape", "idiot", "phising", "rasse", "rasist", "runka", "lesbian", "nazist", "palestina", "israel", "barnporr", "kocentrationläger",
+                "hitler", "stalin", "gahbe", "puta","kurwa", "mammaknullare", "pappaknullare", "judejävel", "judeslakt"];
+    foreach ($badWords as $word) {
+        $wordLower = mb_strtolower($word, 'UTF-8'); 
+        $reversedWord = strrev($wordLower); 
+        
+        if (strpos($textLower, $wordLower) !== false || strpos($textLower, $reversedWord) !== false) {
+            return true;
+        }
+    }
+    return false; 
+}
+
+
+
 App::post("/create", function(){
 
     if (!Auth()) { 
@@ -110,7 +133,21 @@ App::post("/create", function(){
     }
 
     $data =(array) json_decode(file_get_contents('php://input'));
+
+
+    if (containsBadWords($data["title"])) {
+        jsonResponse(["error" => "Titeln innehåller olämpliga ord"]);
+        return;
+    }
+
+    if (containsBadWords($data["description"])) {
+        jsonResponse(["error" => "Beskrivningen innehåller olämpliga ord"]);
+        return;
+    }
+
     $data["userId"] = $_SESSION["id"];
+    /* $eventDate = new DateTime($data["event_date"]);
+        $data["event_date"] = $eventDate->format('m-d-Y'); */
     /* echo json_encode( ["error"=>$data["userId"]]); */
     if(empty($data["userId"]) || empty($data["title"]) || empty($data["event_date"]) || empty($data["location"]) || empty($data["description"]) || empty($data["category_id"]) /* || empty($data["event_img"]) */){
         jsonResponse(["error" => "Ange alla fält"]);
@@ -295,11 +332,25 @@ App::put("/updateProfile", function(){
         jsonResponse(["error" => "Unauthorized access"]);
         return; 
     }
+ /*    if (containsBadWords($data["title"])) {
+        jsonResponse(["error" => "Titeln innehåller olämpliga ord"]);
+        return;
+    } */
+
+    
     $profileData =(array) json_decode(file_get_contents('php://input'));
     if(!empty($profileData["email"])){
+        if (containsBadWords($profileData["email"])) {
+            jsonResponse(["error" => "Emailen innehåller olämpliga ord"]);
+            return;
+        }
         $emailRes = UserDb::updateEmail($profileData['email'], $profileData['id']);
         jsonResponse($emailRes);
     }if(!empty($profileData['username'])){
+        if (containsBadWords($profileData["username"])) {
+            jsonResponse(["error" => "Användarnamnet innehåller olämpliga ord"]);
+            return;
+        }
         $usernameRes = UserDb::updateUsername($profileData['username'], $profileData['id']);
         jsonResponse($usernameRes);
     }

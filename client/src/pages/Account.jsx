@@ -247,7 +247,7 @@ function Account({isAuth, logOut, setUserEvents, setEventArr, userEvents}) {
             </section>
 
             <section>
-                <div onClick={logOut} className="logout">
+                <div onClick={logOut} className="logout btn-danger">
                     <p>Logga ut</p>
                     <span className="material-symbols-outlined">logout</span>
                 </div>
@@ -277,7 +277,7 @@ function Account({isAuth, logOut, setUserEvents, setEventArr, userEvents}) {
     :
 
     <nav className="header-nav">
-        <a href="#register"> Register</a>
+        <a  className="btn btn-warning" href="#register"> Register</a>
         <a className="btn btn-warning" href="#login">Login</a>
     </nav>
     }

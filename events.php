@@ -80,7 +80,7 @@ class EventDb {
               foreach ($ads as $ad) {
                 $numOf_pos = ($numAds * $ad['percent_pos']) / 100;
                 for($i=0;$i < $numOf_pos; $i++){
-                    array_splice($data, rand(1, count($data)), 0, [[
+                    array_splice($data, rand(1, count($data)- 1), 0, [[
                         'title' => $ad['ad_title'],
                         'description' => $ad['ad_description'],
                         'ad_link' => $ad['ad_link'],
@@ -94,7 +94,7 @@ class EventDb {
                     for($i=0; $i<$NumEmptySlots; $i++){
                         $ad = ["title"=>"Vill du ha din annons här?", "description"=>"Kontakta oss: dinemail@gmail.com", "ad_link"=>"dinlänkhär.se","type"=>"ad"];
                         //nu används inte ads databasen
-                        array_splice($data, rand(0, count($data)), 0, [$ad]);
+                        array_splice($data, rand(1, count($data)-1), 0, [$ad]);
                     }
                }
             return $data;
@@ -104,7 +104,7 @@ class EventDb {
         } finally {
             $con->close();
         }
-    } 
+    }
 
     public static function createEvent($data) {
         try {
@@ -255,9 +255,16 @@ class EventDb {
             $stmt = $con->prepare("INSERT INTO favorites(user_id, event_id) VALUES(?,?)"); //skicka också med vilken användare
             $stmt->bind_param("ii",$favoriteInfo["userId"],$favoriteInfo["event_id"]); //om fel kolla userId o event_id
             if($stmt->execute()){
-                return ["success"=> "Event is added to favorite"];
+                $updateStmt = $con->prepare("UPDATE events SET like_count = like_count + 1 WHERE id = ?");
+                $updateStmt->bind_param("i", $favoriteInfo["event_id"]);
+                
             }
-            return ["error"=>$stmt->error];
+            if($updateStmt->execute()) {
+                return ["success"=> "Event is added to favorite"];
+            } else {
+                return ["error"=>$stmt->error];
+            }
+            
         }catch(mysqli_sql_exception $e){
             throw new Exception($e->getMessage());
         }finally{
@@ -300,9 +307,15 @@ class EventDb {
             $stmt= $con->prepare("DELETE FROM favorites WHERE user_id=? AND event_id=?");
             $stmt->bind_param("ii", $request['userId'], $request['event_id']);
             if($stmt->execute()){
-                return ["success"=>"Fav Deleted"];
+                $updateStmt = $con->prepare("UPDATE events SET like_count = like_count - 1 WHERE id = ?");
+                $updateStmt->bind_param("i", $request["event_id"]);
+                
             }
-            return ["error"=> $stmt->error];
+            if($updateStmt->execute()) {
+                return ["success"=>"Fav Deleted"];
+            } else {
+                return ["error"=> $stmt->error];
+            }
         }catch(mysqli_sql_exception $e){
             throw new Exception($e->getMessage());
         }finally{

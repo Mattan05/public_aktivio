@@ -13,6 +13,7 @@ import EventPage from './pages/EventPage';
 import { City } from 'country-state-city';
 import Select from 'react-select';
 import Favorites from './pages/Favoritess';
+import Message from './pages/Message';
 
 ///////////////////////////7//
 /* import React from 'react';
@@ -27,12 +28,17 @@ function App() {
   const [userEvents, setUserEvents] = useState([]);
   const [favorites, setFavorites] = useState([]);
   const [allCities, setCities] = useState([]);
+  const [sortOrder, setSortOrder] = useState("latest");
+
+  const [selectedCity, setSelectedCity] = useState(null); // För att hålla reda på den valda staden
+
+/*   const [likeCount, setlikeCount] = useState([]); */
   
 /*   const [sortOrder, setSortOrder] = useState("latest");
 const [selectedCity, setSelectedCity] = useState(null);
 
  */
-
+console.log(eventArr);
   useEffect(()=>{
     checkSessionStatus();
   }, []); //ta bort isAuth (update ska jag ha isAuth variabel i den eller [])
@@ -43,7 +49,7 @@ const [selectedCity, setSelectedCity] = useState(null);
   
   useEffect(()=>{ //ska det vara async
     getEvents();  
-  }, []);
+  }, [userEvents]);
 
   useEffect(()=>{
     getCities();
@@ -53,31 +59,50 @@ useEffect(()=>{
   if (userId) {
   loadFavorites();
   }
-}, [userId]);
+}, [eventArr]);
+
+useEffect(()=>{
+  if (userId) {
+  loadFavorites();
+  }
+}, [userId]); 
+
+
+async function clearFilters(){
+  setSelectedCity(null);
+
+  await getEvents();
+}
 
 async function getCities(){
   try{
       const cities = City.getCitiesOfCountry('SE');
       const data = cities.map(city => ({
+          key: city.name, /* ta bort kanske */
           value: city.name,
           label: city.name
       }));
       
       setCities(data);
-     
   }catch(error){
       console.error('Failed to GET cities:', error);
   }
 }
 
   async function loadFavorites(){
+    try{
     const res = await fetch(`http://localhost/aktivio/loadFavorites?userId=${userId}`);
 
     const favorites = await res.json();
-    if(favorites){
+    if(favorites && favorites.success){
       setFavorites(favorites.success);
     }
-    /* BEHÖVS LITE FIX VID REMOVE OCH AD FÖR DET DUBBLERAS NU. PLUS VID  */
+    else{
+      console.log("Problem setting favorites");
+    }
+  }catch (error) {
+    console.error("Failed to load favorites:", error);
+}
   }
 
   async function checkSessionStatus(){
@@ -94,13 +119,20 @@ async function getCities(){
     }
   }
 
-  function handleSortChange(){
-    return [];
+  function handleSortChange(event) {
+    const selectedSortOrder = event.target.value;
+    /* console.log(selectedSortOrder); */
+    setSortOrder(selectedSortOrder);
   }
 
-  function handleCityChange (){
-    return [];
+  function handleCityChange(selectedOption) {
+    if (selectedOption) {
+      setSelectedCity(selectedOption.value); // Uppdatera den valda staden
+    } else {
+      setSelectedCity(null);
+    }
   }
+  
 
   async function logOut(){
     const res = await fetch("http://localhost/aktivio/logout");
@@ -127,17 +159,22 @@ async function getCities(){
 
   }
 
-  async function loadEventPage(event){
-    let res = await fetch("http://localhost/aktivio/event/"+event.id);
+  async function loadEventPage(event) {
+    console.log(event);
+
+    let eventId = (typeof event === 'object' && event !== null && event.id) ? event.id : event;
+
+    let res = await fetch("http://localhost/aktivio/event/" + eventId);
     let eventData = await res.json();
 
-    if(eventData.error){
+    if (eventData.error) {
         console.log(eventData.error);
     }
-/*      console.log(eventData.data); */
+
     setEventPage(eventData.data);
-    
 }
+
+
     return (
     <>
       <Header/>
@@ -154,31 +191,44 @@ async function getCities(){
         </div> */}
 
         <div className="views" id="home">
-          <h3 className="text-light text-center">Välkommen {activeUser}</h3>
-          <div className="filter-nav p-2 text-light">
-              <div className="text-center">
+          <h3 className="text-warning font-weight-bold text-center p-3">Välkommen {activeUser}</h3>
+          <div className="filter-nav text-light">
+              {/* <div className="text-center">
                 <label>Sortera Tid:</label>
                 <select className="custom-select rounded-pill" onChange={handleSortChange}>
-                  <option value="latest">Latest</option>
-                  <option value="oldest">Oldest</option>
+                  <option value="latest">Senaste</option>
+                  <option value="oldest">Äldsta</option>
                 </select>
+              </div> */}
+              <div className="w-100 d-flex justify-content-center">
+                
+                <Select options={allCities} name="location-filter" className="w-50 text-dark rounded-pill" placeholder="Alla Platser" onChange={handleCityChange}/>
               </div>
+             
+            </div>
+            <div className='mt-3 w-100 mb-4 d-flex justify-content-center'>
+                <button onClick={clearFilters} className='btn btn-danger'>Rensa Filter</button>
+            </div>  
+            
+          {eventArr.filter((event) => {
+          if (!selectedCity) return true; // Om ingen stad är vald, visa alla events
+          return event.location && event.location.toLowerCase() === selectedCity.toLowerCase(); // Filtrera på den valda staden
+        })
+        .length > 0 ? (
+          eventArr.filter((event) => {
+            if (!selectedCity) return true; // Om ingen stad är vald, visa alla events
+            return event.location && event.location.toLowerCase() === selectedCity.toLowerCase(); // Filtrera på den valda staden
+          })
+          .map((event) => (
+            <Home key={"key:" + event.id} setFavorites={setFavorites} userId={userId} isAuth={isAuth} event={event} setEventArr={setEventArr} setUserEvents={setUserEvents} setEventPage={setEventPage} loadEventPage={loadEventPage}/>
+          ))
+        ) : (
+          <p className='text-danger text-center'>Inga evenemang matchar din sökning.</p>
+        )}
+      </div>
 
-              <div className="text-center">
-                <label>Sortera Plats:</label>
-                <Select options={allCities} name="location-filter" className="text-dark rounded-pill" placeholder="Alla Platser" onChange={handleCityChange}/>
-                {/* <select className="custom-select rounded-pill">
-                  <option value="all">All Locations</option>
-                  <option value="north">North</option>
-                  <option value="south">South</option>
-                  <option value="east">East</option>
-                  <option value="west">West</option>
-                </select> */}
-              </div>
-          </div>
-          {eventArr.map(event => (
-            <Home key={event.id} setFavorites={setFavorites} userId={userId} isAuth={isAuth} event={event} setEventArr={setEventArr} setUserEvents={setUserEvents} setEventPage={setEventPage} loadEventPage={loadEventPage}/>
-          ))}
+        <div className="views" id="message">
+          <Message/>
         </div>
 
         <div className="views" id="login">
@@ -198,10 +248,12 @@ async function getCities(){
         </div>
 
         <div className="views" id="favorites">
+          
         <h1 className="text-center text-light">Dina Favoriter</h1>
+        
         {favorites.length > 0 ? (
           favorites.map((favorite) => (
-              <Favorites isAuth={isAuth} userId={userId} key={favorite.id} favorite={favorite} loadEventPage={loadEventPage}></Favorites>
+              <Favorites isAuth={isAuth} userId={userId} key={"fav_"+favorite.event_id} favorite={favorite} loadEventPage={loadEventPage}></Favorites>
           ))
         ) : (
             <p className="text-light text-center">Inga favoriter ännu!</p>

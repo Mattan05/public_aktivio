@@ -41,6 +41,7 @@ body{
     padding-bottom: 10vw;
 }
 
+
 .views:target{
     display:block;
 }
@@ -74,18 +75,15 @@ input{
 }
 
 .filter-nav{
-    display:grid;
+   /*  display:grid;
     grid-template-columns:1fr 1fr;
-    gap:30px;
+    gap:30px; */
 }
 
 
-/* form{
-    width:50%;
-    display:block;
-    margin:auto;
-   
-} */
+form{
+   width:100vw;
+}
 
 input[type="submit"]{
     background-color:green;

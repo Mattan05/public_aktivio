@@ -31,15 +31,31 @@
 
 }
 
+.navbar-ul-before{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    place-items:center;
+    min-height: 10vh;
+    font-size:2rem;
+}
+
+.navbar-ul-before span{
+    font-size:2rem;
+}
+
 .navbar-ul li {
     text-align: center; 
 }
 
-.navbar-ul span {
+.navbar-ul, span {
    /*  padding: 2%; */ /* ändra denna större minsta ... */
     transition: background-color 0.3s ease, transform 0.3s ease; 
     font-size:2rem;
 }
+
 
 .create-btn span {
     font-size:3rem;

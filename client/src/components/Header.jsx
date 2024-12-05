@@ -12,7 +12,7 @@ function Header() {
                 <div className="logo-container">
                     <img src="client/src/aktivio-images/logo.png" alt="Aktivio Logo" />
                 </div>
-                <h1>Aktivio</h1>
+                <h1 className="text-warning">Aktivio</h1>
             </div>
             
             </a>

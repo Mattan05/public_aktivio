@@ -50,17 +50,27 @@ function Register() {
     }
     return( 
     <>
-        <h2>Register</h2>
-        <form onSubmit={handleSubmit}>
-            <input type="text" name="username" placeholder="Användarnamn" autoComplete="off"/>
-            <input type="email" name="email" placeholder="Email" autoComplete="off"/>
-            <input type="password" name="password" placeholder="Lösenord" autoComplete="off"/>
-            <input type="submit" value="Skapa konto" />
-        </form>
-        <div className="server-message" >
-        
-            <p style={{color: messageCol ? "green" : "red" }}>{responseMessage}</p>
-        </div>
+        <h2 className='text-center text-warning'>Register</h2>
+        <form onSubmit={handleSubmit} className="p-3 border rounded shadow-sm">
+  <div className="mb-3">
+    <input type="text" name="username" placeholder="Användarnamn" autoComplete="off" className="form-control" required />
+  </div>
+
+  <div className="mb-3">
+    <input type="email" name="email" placeholder="Email" autoComplete="off" className="form-control" required />
+  </div>
+
+  <div className="mb-3">
+    <input type="password" name="password" placeholder="Lösenord" autoComplete="off" className="form-control" required />
+  </div>
+
+  <button type="submit" className="btn btn-warning w-100">Skapa konto</button>
+</form>
+
+<div className="server-message mt-3">
+  <p style={{ color: messageCol ? "green" : "red" }}>{responseMessage}</p>
+</div>
+
         
 {/* GÖR REQUIRE PÅ FORMS LOGIN CREATE REGISTER */}
     </> 

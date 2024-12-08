@@ -12,7 +12,7 @@ function Login({checkSessionStatus}) {
             password: event.target.password.value
         })
  
-        let response = await fetch('http://localhost/aktivio/login', {
+        let response = await fetch('./login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

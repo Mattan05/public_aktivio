@@ -13,17 +13,21 @@ function Account({isAuth, logOut, setUserEvents, setEventArr, userEvents}) {
  /*    const [showPasswordChange, setShowPasswordChange] = useState(false);
     const [showAccountSettings, setShowAccountSettings] = useState(false); */
     
-
-    useEffect(() => {
-        getUser();
-      }, []);
-
-      useEffect(() => {
-        getUserEvents();
-      }, [user]);
+  /*   if(isAuth){ */ /* ÄNDRING */
+        useEffect(() => {
+            getUser();
+            console.log("getusers");
+          }, [isAuth]);
+    
+          useEffect(() => {
+            getUserEvents();
+            console.log("getUserEvents");
+          }, [user]);
+/*     }
+  */
 
     async function getUser(){
-            let res = await fetch("http://localhost/aktivio/user");
+            let res = await fetch("./user");
             let user = await res.json();
 
             if(user.error){
@@ -52,7 +56,7 @@ function Account({isAuth, logOut, setUserEvents, setEventArr, userEvents}) {
         updateData.id = user.id;
     try{
         let body = JSON.stringify(updateData);
-        const response = await fetch("http://localhost/aktivio/updateProfile",{
+        const response = await fetch("./updateProfile",{
             method:"PUT",
             headers: {
                 'Content-Type': 'application/json'
@@ -86,7 +90,7 @@ function Account({isAuth, logOut, setUserEvents, setEventArr, userEvents}) {
             id: user.id
         });
 
-        const responsePut = await fetch('http://localhost/aktivio/updatePassword', {
+        const responsePut = await fetch('./updatePassword', {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
@@ -122,7 +126,7 @@ function Account({isAuth, logOut, setUserEvents, setEventArr, userEvents}) {
     async function getUserEvents(){
         let sessionId = user.id; //DEN ÄR ODEF
         /* console.log("IDIDID: " + sessionId) */
-        const res = await fetch('http://localhost/aktivio/userEvents/'+sessionId);
+        const res = await fetch('./userEvents/'+sessionId);
             let userEvent = await res.json();
 
             if(userEvent.error){
@@ -152,7 +156,7 @@ function Account({isAuth, logOut, setUserEvents, setEventArr, userEvents}) {
         ev.preventDefault();
  */
         
-         let res = await fetch("http://localhost/aktivio/event/delete/"+id,{
+         let res = await fetch("./event/delete/"+id,{
              method: "DELETE"
      });
          let data = await res.json();

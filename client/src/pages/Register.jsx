@@ -15,7 +15,7 @@ function Register() {
             password: event.target.password.value
         });
  
-        let response = await fetch('http://localhost/aktivio/register', {
+        let response = await fetch('./register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

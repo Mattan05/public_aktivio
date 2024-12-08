@@ -18,7 +18,7 @@ function Home({event, setEventArr, setUserEvents, setEventPage, isAuth, userId, 
 
       async function fetchFavoriteStatus() {
         try {
-            let res = await fetch(`http://localhost/aktivio/isFavorite?userId=${userId}&eventId=${event.id}`);
+            let res = await fetch(`./isFavorite?userId=${userId}&eventId=${event.id}`);
             let data = await res.json();
               
             if (data['success']) {
@@ -32,7 +32,7 @@ function Home({event, setEventArr, setUserEvents, setEventPage, isAuth, userId, 
         async function delFunc(ev){
            ev.stopPropagation();
            ev.preventDefault();
-            let res = await fetch("http://localhost/aktivio/event/delete/"+event.id,{
+            let res = await fetch("./event/delete/"+event.id,{
                 method: "DELETE"
         });
             let data = await res.json();
@@ -72,7 +72,7 @@ function Home({event, setEventArr, setUserEvents, setEventPage, isAuth, userId, 
             });
 
 
-            let serverRes = await fetch("http://localhost/aktivio/addFavorite",{
+            let serverRes = await fetch("./addFavorite",{
                 method:"POST",
                 headers: {
                     'Content-Type': 'application/json'
@@ -131,7 +131,7 @@ function Home({event, setEventArr, setUserEvents, setEventPage, isAuth, userId, 
                 event_id:event.id
             }); //KANSKE INTE BEHÖVS. GÖR BARA ATT NÄR MAN SKAPAR SKICKAS OCKSÅ GET-RESULT FÖR FAV_ID TILLBAKS SOM SEDAN LAGRAS NÅGONSTANS OCH KAN FÅ TAG PÅ AV EV ELLER NÅTT
 
-            let serverRes = await fetch("http://localhost/aktivio/removeFavorite",{
+            let serverRes = await fetch("./removeFavorite",{
                 method:"DELETE",
                 headers:{
                     'Content-Type': 'application/json'

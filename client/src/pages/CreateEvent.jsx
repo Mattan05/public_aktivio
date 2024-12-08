@@ -6,9 +6,13 @@ import Select from 'react-select'
 function CreateEvent({setEventArr, setUserEvents, userId, allCities}) {
 
    /*  console.log("postmadeby"+ userId); */
-    useEffect(()=>{
+/*    if(userId){ */
+    useEffect(()=>{ /* ÄNDRING */
         getCategories();
-    }, []);
+        console.log("getcategories");
+    }, [userId]);
+ /*   } */
+ 
 
 /*     useEffect(()=>{
         getCities();
@@ -40,7 +44,7 @@ function CreateEvent({setEventArr, setUserEvents, userId, allCities}) {
             category_id:event.target.category_id.value
         });
 
-        let response = await fetch('http://localhost/aktivio/create', {
+        let response = await fetch('./create', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -98,7 +102,7 @@ function CreateEvent({setEventArr, setUserEvents, userId, allCities}) {
         if(file.size>2000000) return alert("File is too big...");
 
         try{
-            let response = await fetch('http://localhost/aktivio/events/upload',{//lägg till server route
+            let response = await fetch('./events/upload',{//lägg till server route
                 method:'POST',
                 body: formData
             }); 
@@ -129,7 +133,7 @@ function CreateEvent({setEventArr, setUserEvents, userId, allCities}) {
     
     async function getCategories(){
         try{
-            let responseCategories = await fetch('http://localhost/aktivio/categories');
+            let responseCategories = await fetch('./categories');
             const categories = await responseCategories.json();
             setCategories(categories);
         }catch(error){

@@ -38,7 +38,7 @@ function App() {
 const [selectedCity, setSelectedCity] = useState(null);
 
  */
-console.log(eventArr);
+/* console.log(eventArr); */
   useEffect(()=>{
     checkSessionStatus();
   }, []); //ta bort isAuth (update ska jag ha isAuth variabel i den eller [])
@@ -47,9 +47,13 @@ console.log(eventArr);
     window.location.replace('#home');
   }, []);
   
-  useEffect(()=>{ //ska det vara async
+useEffect(()=>{ 
     getEvents();  
   }, [userEvents]);
+
+/*   useEffect(()=>{ 
+    getEvents();
+  }, []);  */
 
   useEffect(()=>{
     getCities();
@@ -91,7 +95,7 @@ async function getCities(){
 
   async function loadFavorites(){
     try{
-    const res = await fetch(`http://localhost/aktivio/loadFavorites?userId=${userId}`);
+    const res = await fetch(`./loadFavorites?userId=${userId}`);
 
     const favorites = await res.json();
     if(favorites && favorites.success){
@@ -106,7 +110,7 @@ async function getCities(){
   }
 
   async function checkSessionStatus(){
-    const res = await fetch('http://localhost/aktivio/auth');
+    const res = await fetch('./auth');
     const sessionData = await res.json();
     /* console.log("SESSION", sessionData.user, sessionData.sessionId, sessionData.loggedIn) */
     if(sessionData.loggedIn === true){
@@ -135,7 +139,7 @@ async function getCities(){
   
 
   async function logOut(){
-    const res = await fetch("http://localhost/aktivio/logout");
+    const res = await fetch("./logout");
     const logoutData = await res.json();
     if(logoutData.success){
       setActiveUser(null);
@@ -145,7 +149,7 @@ async function getCities(){
   }
 
   async function getEvents(){
-    let data = await fetch('http://localhost/aktivio/events',{
+    let data = await fetch('./events',{
         method: 'GET'
     });
     const responseData = await data.json();
@@ -164,7 +168,7 @@ async function getCities(){
 
     let eventId = (typeof event === 'object' && event !== null && event.id) ? event.id : event;
 
-    let res = await fetch("http://localhost/aktivio/event/" + eventId);
+    let res = await fetch("./event/" + eventId);
     let eventData = await res.json();
 
     if (eventData.error) {
@@ -240,7 +244,7 @@ async function getCities(){
         </div>
 
         <div className="views" id="create">
-          <CreateEvent allCities={allCities} userId={userId} setUserEvents={setUserEvents} setEventArr={setEventArr} getEvents={getEvents}></CreateEvent>
+          <CreateEvent isAuth= {isAuth} allCities={allCities} userId={userId} setUserEvents={setUserEvents} setEventArr={setEventArr} getEvents={getEvents}></CreateEvent>
         </div>
 
         <div className="views" id="eventPage">
@@ -265,14 +269,6 @@ async function getCities(){
       {isAuth ?  (<SignedInNavbar/>) : (<NavBar/>)}
           
       <Footer/>
-          
-          
-          
-          
-      
-          
-      
-      
       
        {/*  #facebookgrupp vad händer i halmstad
         #koncentrera halmstad eller sortera städer
